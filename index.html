@@ -89,14 +89,14 @@
   				  },
 				  
 				  componentDidUpdate: function() {
-					var btns = $("a.btn-default");
+					var btns = $("a.fakeable");
 					var randompos = Math.floor(Math.random()*btns.length);
 					var randombtn = btns[randompos];
 					
 					var f = function() {
 						randombtn.click();
 					};
-				 	// setTimeout(f, 500);
+				 	// setTimeout(f, 100);
 				  },
 
 				  	
@@ -202,7 +202,7 @@
           return (
             <div key={k}>
 				<h4>{item.displayName} <small>({item.username})</small></h4>
-				<a className="btn btn-default btn-xs" data-username="gagga" href="#" onClick={this.deactiveUser.bind(this, item.username)}>deactivate</a>
+				<a className="btn btn-default btn-xs fakeable" data-username="gagga" href="#" onClick={this.deactiveUser.bind(this, item.username)}>deactivate</a>
 			</div>
           );
         }, this)}
@@ -214,7 +214,7 @@
           return (
             <div key={k}>
 				<h4>{item.displayName} <small>({item.username})</small></h4>
-				<a className="btn btn-default btn-xs" data-username={item.username} href="#" onClick={this.reactivateUser}>Re-activate</a>
+				<a className="btn btn-default btn-xs fakeable" data-username={item.username} href="#" onClick={this.reactivateUser}>Re-activate</a>
 				<a className="btn btn-default btn-xs" data-username={item.username} href="#" onClick={this.deleteUser}>Delete</a>
 				
 			</div>
