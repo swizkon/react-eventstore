@@ -1,0 +1,51 @@
+fromStream("users")
+  .when({
+    $init: function() {
+      return { 
+        createdCount: 0, 
+        deletedCount: 0, 
+        reactivatedCount: 0, 
+        activeUsers: {}, 
+        deactivatedUsers: {}
+        }
+    },
+    "userCreated": function(state, event) {
+        if(!event.body.username)
+        return state;
+      state.createdCount += 1
+      state.activeUsers[event.body.username] = event.body
+      state.activeUsers[event.body.username].status = "created"
+    },
+    "userDeactivated": function(s, event) {
+        if(!event.body.username)
+        return s;
+      s.deletedCount += 1
+      
+      if(s.activeUsers[event.body.username]
+        && !s.deactivatedUsers[event.body.username]) {
+            s.deactivatedUsers[event.body.username] = s.activeUsers[event.body.username]
+            s.deactivatedUsers[event.body.username].status = "deactivated"
+        }
+      delete s.activeUsers[event.body.username];
+    },
+    "userReactivated": function(s, event) {
+        if(!event.body.username)
+        return s;
+      s.reactivatedCount += 1
+      if(s.deactivatedUsers[event.body.username]
+        && !s.activeUsers[event.body.username]) {
+            s.activeUsers[event.body.username] = s.deactivatedUsers[event.body.username]
+            s.activeUsers[event.body.username].status = "re-activated"
+        }
+      delete s.deactivatedUsers[event.body.username];
+    },
+    "userDeleted": function(s, event) {
+        if(!event.body.username)
+        return s;
+      if(s.deactivatedUsers[event.body.username]) {
+            s.deactivatedUsers[event.body.username].status = "deleted"
+        }
+      delete s.deactivatedUsers[event.body.username];
+    }
+    
+  })
